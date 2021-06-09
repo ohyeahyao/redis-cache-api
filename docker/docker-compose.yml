@@ -1,0 +1,53 @@
+version: '3.7'
+
+services:
+  cache:
+    image: redis:6.2.3
+    environment:
+      - TZ=${GLOBAL_TIMEZONE}
+    # 刻意不掛 volume
+    expose:
+      - 6379
+
+  db-main:
+    image: mysql:5.6
+    environment:
+      - TZ=${GLOBAL_TIMEZONE}
+      - MYSQL_DATABASE=${DB_MAIN_DATABASE}
+      - MYSQL_USER=${DB_MAIN_USER}
+      - MYSQL_PASSWORD=${DB_MAIN_PASSWORD}
+      - MYSQL_ROOT_PASSWORD=${DB_MAIN_ROOT_PASSWORD}
+    volumes:
+      - ${DB_DATA_HOST_PATH}:/var/lib/mysql
+      # - ./data/db-main-init:/docker-entrypoint-initdb.d
+    expose:
+      - 3306
+    ports:
+      - 3306:3306
+
+  http-server:
+    build:
+      dockerfile: ./src/http-server/Dockerfile
+      context: .
+    environment:
+      - TZ=UTC
+    volumes:
+      - ${CODE_HOST_PATH}:${CODE_IN_CONTAINER_PATH}:delegated
+      - ./logs/http-server:/var/log/nginx
+      - ./config/http-server/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./config/http-server/sites:/etc/nginx/conf.d:ro
+    depends_on:
+      - php-fpm
+    expose:
+      - 80
+    ports:
+      - 80:80
+
+  php-fpm:
+    build:
+      dockerfile: ./src/php-fpm/Dockerfile
+      context: .
+    environment:
+      - TZ=UTC
+    volumes:
+      - ${CODE_HOST_PATH}:${CODE_IN_CONTAINER_PATH}:delegated

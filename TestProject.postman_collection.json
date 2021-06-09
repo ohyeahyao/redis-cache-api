@@ -1,0 +1,51 @@
+{
+	"info": {
+		"_postman_id": "4efe5316-27c9-49d9-aae3-b0d706f65006",
+		"name": "TestProject",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "tutors list board api",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://api-demo.local/api/tutors/english",
+					"protocol": "http",
+					"host": [
+						"amazing-talker",
+						"local"
+					],
+					"path": [
+						"api",
+						"tutors",
+						"english"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "tutor detail",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://api-demo.local/api/tutor/en-ohyeahyao",
+					"protocol": "http",
+					"host": [
+						"amazing-talker",
+						"local"
+					],
+					"path": [
+						"api",
+						"tutor",
+						"en-ohyeahyao"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
